@@ -3,12 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import type { CheckoutData } from '../types'
 import { useCartStore, cartSubtotal } from '../store/cartStore'
-import {
-  buildWhatsappMessage,
-  buildWhatsappUrl,
-  deliveryFeeFor,
-  generateOrderNumber,
-} from '../lib/whatsapp'
+import { buildWhatsappMessage, buildWhatsappUrl, deliveryFeeFor, generateOrderNumber } from '../lib/whatsapp'
 import { useLockBodyScroll } from '../hooks/useLockBodyScroll'
 import { useEscapeKey } from '../hooks/useEscapeKey'
 import { Button } from '../components/Button'
@@ -27,6 +22,7 @@ const initialData: CheckoutData = {
   address: { cep: '', street: '', number: '', neighborhood: '', complement: '' },
   payment: 'pix',
   changeFor: '',
+  unitId: '306',
 }
 
 export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
@@ -51,8 +47,9 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
+    if (items.length === 0) return
     const message = buildWhatsappMessage(items, data, generateOrderNumber())
-    const url = buildWhatsappUrl(message)
+    const url = buildWhatsappUrl(message, data.unitId)
     window.open(url, '_blank', 'noopener,noreferrer')
     clear()
     closeCart()
@@ -70,12 +67,7 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
         >
-          <button
-            type="button"
-            aria-label="Fechar"
-            className="absolute inset-0 bg-ink/45 backdrop-blur-sm"
-            onClick={onClose}
-          />
+          <button type="button" aria-label="Fechar" className="absolute inset-0 bg-ink/45 backdrop-blur-sm" onClick={onClose} />
 
           <motion.div
             role="dialog"
@@ -89,7 +81,7 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
           >
             <div className="flex items-center justify-between border-b border-line px-6 py-5">
               <div>
-                <p className="mb-1 font-body text-[10px] font-bold tracking-widest text-ink/60">{SITE_CONFIG.brand}</p>
+                <p className="mb-1 font-body text-[10px] font-bold tracking-widest text-flame">CAJUÍ · Palmas — TO</p>
                 <h2 id="checkout-title" className="font-display text-2xl tracking-wide text-ink">
                   Finalizar pedido
                 </h2>
@@ -98,7 +90,7 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
                 type="button"
                 onClick={onClose}
                 aria-label="Fechar"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-ink/70 hover:bg-graphite/5"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-ink/70 hover:bg-ink/5"
               >
                 <X size={18} />
               </button>
@@ -106,6 +98,32 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
 
             <form onSubmit={handleSubmit} className="flex flex-1 flex-col overflow-y-auto">
               <div className="flex flex-1 flex-col gap-6 px-6 py-6">
+                <fieldset>
+                  <legend className="font-body text-xs font-semibold uppercase tracking-widest2 text-ink/50">Unidade do pedido *</legend>
+                  <p className="mt-1 font-body text-xs text-muted">Escolha para onde seu pedido será enviado.</p>
+                  <div className="mt-3 grid grid-cols-2 gap-3">
+                    {SITE_CONFIG.units.map((unit) => (
+                      <label
+                        key={unit.id}
+                        className={`flex cursor-pointer flex-col rounded-xl border p-4 transition-colors ${
+                          data.unitId === unit.id ? 'border-ink bg-ink text-white' : 'border-line bg-paper text-ink hover:border-ink/40'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="unitId"
+                          value={unit.id}
+                          checked={data.unitId === unit.id}
+                          onChange={() => update('unitId', unit.id)}
+                          className="sr-only"
+                        />
+                        <span className="font-display text-lg leading-none tracking-wide">{unit.label}</span>
+                        <span className={`font-body text-xs ${data.unitId === unit.id ? 'text-white/70' : 'text-muted'}`}>{unit.detail}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+
                 <div>
                   <label htmlFor="name" className="font-body text-xs font-semibold uppercase tracking-widest2 text-ink/50">
                     Nome *
@@ -135,17 +153,13 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
                 </div>
 
                 <fieldset>
-                  <legend className="font-body text-xs font-semibold uppercase tracking-widest2 text-ink/50">
-                    Entrega
-                  </legend>
+                  <legend className="font-body text-xs font-semibold uppercase tracking-widest2 text-ink/50">Entrega</legend>
                   <div className="mt-3 grid grid-cols-2 gap-3">
                     {(['retirada', 'entrega'] as const).map((option) => (
                       <label
                         key={option}
                         className={`flex cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-3 font-body text-sm capitalize transition-colors ${
-                          data.delivery === option
-                            ? 'border-ink bg-ink/5 text-ink'
-                            : 'border-line text-ink/70 hover:border-ink/40'
+                          data.delivery === option ? 'border-ink bg-ink/5 text-ink' : 'border-line text-muted hover:border-ink/40'
                         }`}
                       >
                         <input
@@ -238,9 +252,7 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
                       <label
                         key={option.id}
                         className={`flex cursor-pointer items-center justify-center rounded-lg border px-3 py-3 font-body text-sm transition-colors ${
-                          data.payment === option.id
-                            ? 'border-ink bg-ink/5 text-ink'
-                            : 'border-line text-ink/70 hover:border-ink/40'
+                          data.payment === option.id ? 'border-ink bg-ink/5 text-ink' : 'border-line text-muted hover:border-ink/40'
                         }`}
                       >
                         <input
@@ -276,30 +288,26 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
               <div className="border-t border-line px-6 py-5">
                 <dl className="mb-4 flex flex-col gap-1.5 font-body text-sm">
                   {fee > 0 && (
-                    <div className="flex items-center justify-between text-ink/60">
+                    <div className="flex items-center justify-between text-muted">
                       <dt>Subtotal</dt>
                       <dd>{formatBRL(subtotal)}</dd>
                     </div>
                   )}
                   {data.delivery === 'entrega' && (
-                    <div className="flex items-center justify-between text-ink/60">
+                    <div className="flex items-center justify-between text-muted">
                       <dt>Taxa de entrega</dt>
                       <dd>{fee > 0 ? formatBRL(fee) : 'A combinar'}</dd>
                     </div>
                   )}
                   <div className="mt-1 flex items-center justify-between border-t border-line pt-2.5">
-                    <dt className="font-display text-lg tracking-wide text-ink">
-                      {fee > 0 ? 'Total' : 'Total dos produtos'}
-                    </dt>
+                    <dt className="font-display text-lg tracking-wide text-ink">{fee > 0 ? 'Total' : 'Total dos produtos'}</dt>
                     <dd className="font-display text-2xl text-ink">{formatBRL(total)}</dd>
                   </div>
                 </dl>
                 <Button type="submit" variant="solid" className="w-full">
-                  Finalizar no WhatsApp
+                  Enviar no WhatsApp — {SITE_CONFIG.units.find((u) => u.id === data.unitId)?.label}
                 </Button>
-                <p className="mt-3 text-center font-body text-[11px] text-ink/45">
-                  Abre o WhatsApp com o pedido pronto. Você confere e envia.
-                </p>
+                <p className="mt-3 text-center font-body text-[11px] text-ink/45">Abre o WhatsApp da unidade escolhida com o pedido pronto.</p>
               </div>
             </form>
           </motion.div>

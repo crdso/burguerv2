@@ -3,17 +3,9 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import type { CartItem, CartItemSelection, Product } from '../types'
 import { getProductById } from '../data/products'
 
-// Read the previous brand's cart once so the rebrand preserves existing orders.
-const LEGACY_CART_KEY = 'rio-hamburgueria-cart'
-const LEGACY_PRODUCT_IDS: Record<string, string> = {
-  'rio-classic': 'black-classic',
-  'rio-bacon': 'black-bacon',
-}
-
 function selectionKey(productId: string, selection: CartItemSelection): string {
   const extras = [...selection.extraIds].sort().join(',')
-  const removed = [...selection.removedIds].sort().join(',')
-  return `${productId}|${extras}|${removed}|${selection.note.trim()}`
+  return `${productId}|${extras}|${selection.cheese ?? 'cheddar'}|${selection.vegetarian ? 'veg' : 'carne'}|${selection.note.trim()}`
 }
 
 export function computeUnitPrice(product: Product, selection: CartItemSelection): number {
@@ -76,28 +68,9 @@ export const useCartStore = create<CartState>()(
       clear: () => set({ items: [] }),
     }),
     {
-      name: 'black-burguer-cart',
-      version: 1,
-      storage: createJSONStorage(() => ({
-        getItem: (name) => localStorage.getItem(name) ?? localStorage.getItem(LEGACY_CART_KEY),
-        setItem: (name, value) => {
-          localStorage.setItem(name, value)
-          localStorage.removeItem(LEGACY_CART_KEY)
-        },
-        removeItem: (name) => {
-          localStorage.removeItem(name)
-          localStorage.removeItem(LEGACY_CART_KEY)
-        },
-      })),
-      migrate: (persistedState) => {
-        const state = persistedState as Pick<CartState, 'items'>
-        return {
-          items: state.items.map((item) => {
-            const productId = LEGACY_PRODUCT_IDS[item.productId] ?? item.productId
-            return { ...item, productId, key: selectionKey(productId, item.selection) }
-          }),
-        }
-      },
+      name: 'cajui-cart',
+      version: 2,
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ items: state.items }),
     },
   ),

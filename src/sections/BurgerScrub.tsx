@@ -2,24 +2,19 @@ import { useEffect, useRef } from 'react'
 import { SITE_CONFIG } from '../data/config'
 import { useCartStore } from '../store/cartStore'
 
-/** [fadeInStart, fadeInEnd, fadeOutStart, fadeOutEnd] in scroll-progress space. */
 type Window4 = [number, number, number, number]
 
 const LINES = [
-  'Pão brioche tostado na manteiga.',
-  'Blend de 160g na chapa quente.',
-  'Cheddar, bacon, tomate e alface.',
+  'Hambúrguer artesanal em Palmas.',
+  'Vem ser cliente/amigo.',
 ]
 
-/** One window per rendered line: the brand headline first, then LINES. */
 const CHAPTERS: Window4[] = [
   [0, 0, 0.16, 0.23],
   [0.23, 0.3, 0.42, 0.49],
-  [0.47, 0.54, 0.64, 0.71],
-  [0.69, 0.76, 0.88, 0.94],
+  [0.47, 0.54, 0.68, 0.76],
 ]
 
-/** The video reaches its last frame here; the rest of the pin lets it settle. */
 const VIDEO_END = 0.96
 
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v))
@@ -64,9 +59,7 @@ export function BurgerScrub() {
       return
     }
 
-    // Width only: a wide touchscreen laptop should still get the full-size asset.
     const isMobile = window.matchMedia('(max-width: 900px)').matches
-    // Below this delta a seek costs more than it visually gains.
     const seekThreshold = isMobile ? 0.03 : 0.018
 
     let target = 0
@@ -82,7 +75,6 @@ export function BurgerScrub() {
 
     function render(progress: number) {
       section!.style.setProperty('--scrub-progress', progress.toFixed(4))
-
       for (let i = 0; i < lines.length; i++) {
         const o = opacityFor(progress, CHAPTERS[i])
         lines[i].style.opacity = o.toFixed(3)
@@ -91,8 +83,6 @@ export function BurgerScrub() {
       if (cue) cue.style.opacity = (1 - ease((progress - 0.06) / 0.1)).toFixed(3)
     }
 
-    // Always cancel before scheduling: a frame dropped while the tab is hidden
-    // would otherwise leave a stale id here and stall the loop for good.
     function ensureTick() {
       if (tickRaf) cancelAnimationFrame(tickRaf)
       tickRaf = requestAnimationFrame(tick)
@@ -120,8 +110,6 @@ export function BurgerScrub() {
       tickRaf = 0
       const dt = lastTs ? Math.min(64, ts - lastTs) : 16.7
       lastTs = ts
-
-      // Frame-rate independent lerp so fast and slow displays feel the same.
       const alpha = 1 - Math.pow(1 - 0.2, dt / 16.7)
       smoothed += (target - smoothed) * alpha
       if (Math.abs(target - smoothed) < 0.0004) smoothed = target
@@ -139,7 +127,6 @@ export function BurgerScrub() {
           }
         }
       }
-      // Watchdog: never let a dropped `seeked` event stall the loop.
       if (seeking && (video!.seeking === false || ts - seekStartedAt > 400)) seeking = false
 
       if (Math.abs(target - smoothed) >= 0.0004 || seeking) {
@@ -154,7 +141,6 @@ export function BurgerScrub() {
       ensureTick()
     }
 
-    // Coming back from a hidden tab: rAF was paused, so re-sync from scratch.
     function onVisible() {
       if (document.visibilityState !== 'visible') return
       lastTs = 0
@@ -180,7 +166,6 @@ export function BurgerScrub() {
     window.addEventListener('orientationchange', readScroll, { passive: true })
     document.addEventListener('visibilitychange', onVisible)
 
-    // iOS refuses to decode frames for seeking until the element has played once.
     const warm = () => {
       const p = video.play()
       if (p) p.then(() => video.pause()).catch(() => {})
@@ -222,7 +207,7 @@ export function BurgerScrub() {
           />
           <img
             src={SITE_CONFIG.media.final}
-            alt={`Hambúrguer artesanal da ${SITE_CONFIG.brand}, com cheddar, bacon e cebola roxa.`}
+            alt="Hambúrguer artesanal ilustrativo — imagem ilustrativa."
             className="scrub-still"
             loading="lazy"
             decoding="async"
@@ -230,12 +215,10 @@ export function BurgerScrub() {
         </div>
 
         <div ref={copyRef} className="scrub-copy">
-          <p className="scrub-kicker">
-            {SITE_CONFIG.address.city} — {SITE_CONFIG.address.state}
-          </p>
+          <p className="scrub-kicker">Palmas — TO</p>
           <div className="scrub-lines">
             <h1 id="scrub-title" className="scrub-line scrub-title">
-              {SITE_CONFIG.brand}
+              CAJUÍ
             </h1>
             {LINES.map((line) => (
               <p key={line} className="scrub-line" aria-hidden="true">
@@ -244,27 +227,28 @@ export function BurgerScrub() {
             ))}
           </div>
 
-          <p className="scrub-support">{SITE_CONFIG.tagline} Peça pelo WhatsApp e retire ou receba em casa.</p>
+          <p className="scrub-support">Hambúrguer artesanal em Palmas. Vem ser cliente/amigo.</p>
 
           <div className="scrub-actions">
             <a
               href="#cardapio"
-              className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3.5 font-body text-sm font-bold uppercase tracking-wider text-paper transition-colors hover:bg-graphite"
+              className="inline-flex items-center justify-center rounded-full bg-ink px-7 py-3.5 font-body text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-graphite"
             >
-              Ver o cardápio
+              Ver cardápio
             </a>
             <button
               type="button"
               onClick={openCart}
-              className="inline-flex items-center justify-center rounded-full border border-ink/20 px-7 py-3.5 font-body text-sm font-bold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-graphite hover:text-paper"
+              className="inline-flex items-center justify-center rounded-full border border-ink/15 px-7 py-3.5 font-body text-sm font-bold uppercase tracking-wider text-ink transition-colors hover:border-ink hover:bg-ink hover:text-white"
             >
-              Pedir agora
+              Fazer pedido
             </button>
           </div>
 
           <div className="scrub-rail" aria-hidden="true">
             <i />
           </div>
+          <p className="mt-3 font-body text-[11px] text-ink/40">Imagem ilustrativa.</p>
         </div>
 
         <div ref={cueRef} className="scrub-cue" aria-hidden="true">

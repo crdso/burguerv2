@@ -14,17 +14,17 @@ export default {
     },
     extend: {
       colors: {
-        /** Page background. Must match --page in index.css and PAGE in scripts/encode-scrub-video.mjs. */
-        paper: '#FCFAF8',
+        paper: '#F4F8F4',
         surface: '#FFFFFF',
-        ink: '#161616',
-        graphite: '#353535',
-        line: '#E5E2DF',
-        void: '#080706',
-        charcoal: '#11100E',
-        flame: '#D92D15',
-        ember: '#FF5A1F',
-        cream: '#F2E6D2',
+        ink: '#14321F',
+        graphite: '#1E4A2E',
+        line: '#DDE8DC',
+        sage: '#E6F0E6',
+        sageStrong: '#C8DCC2',
+        flame: '#E86A1E',
+        ember: '#FF8C2E',
+        cream: '#FFF7ED',
+        muted: '#5A6B5A',
       },
       fontFamily: {
         display: ['"Bebas Neue"', 'Impact', 'sans-serif'],

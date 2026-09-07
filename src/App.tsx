@@ -4,6 +4,7 @@ import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { BurgerScrub } from './sections/BurgerScrub'
 import { MenuSection } from './sections/MenuSection'
+import { UnitsSection } from './sections/UnitsSection'
 import { ProductModal } from './products/ProductModal'
 import { CartDrawer } from './cart/CartDrawer'
 import { CheckoutModal } from './checkout/CheckoutModal'
@@ -19,6 +20,7 @@ export default function App() {
       <main>
         <BurgerScrub />
         <MenuSection onSelectProduct={setSelectedProduct} />
+        <UnitsSection />
       </main>
 
       <Footer />

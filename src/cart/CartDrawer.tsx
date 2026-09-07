@@ -73,7 +73,7 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                 type="button"
                 onClick={closeCart}
                 aria-label="Fechar"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-ink/70 hover:bg-graphite/5 hover:text-ink"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-ink/70 hover:bg-ink/5 hover:text-ink"
               >
                 <X size={18} />
               </button>
@@ -83,7 +83,7 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
               {items.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center gap-3 py-16 text-center">
                   <Flame size={40} strokeWidth={1} className="text-ink/15" />
-                  <p className="font-body text-sm text-ink/50">Seu carrinho está vazio.</p>
+                  <p className="font-body text-sm text-muted">Seu carrinho está vazio.</p>
                 </div>
               ) : (
                 <ul className="flex flex-col divide-y divide-line">
@@ -92,39 +92,34 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                     if (!product) return null
                     return (
                       <li key={item.key} className="flex gap-4 py-5">
-                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-line/40">
-                          {product.image ? (
-                            <img src={product.image} alt="" className="h-full w-full object-cover" />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-line/40">
-                              <Flame size={22} strokeWidth={1} className="text-ink/15" />
-                            </div>
-                          )}
+                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-sage">
+                          <div className="flex h-full w-full items-center justify-center bg-sage">
+                            <Flame size={22} strokeWidth={1} className="text-ink/15" />
+                          </div>
                         </div>
 
                         <div className="flex flex-1 flex-col">
                           <div className="flex items-start justify-between gap-2">
-                            <p className="font-display text-lg leading-tight tracking-wide text-ink">
-                              {product.name}
-                            </p>
-                            <p className="font-body text-sm font-bold text-ink">
-                              {formatBRL(item.unitPrice * item.quantity)}
-                            </p>
+                            <p className="font-display text-lg leading-tight tracking-wide text-ink">{product.name}</p>
+                            <p className="font-body text-sm font-bold text-flame">{formatBRL(item.unitPrice * item.quantity)}</p>
                           </div>
 
-                          {(item.selection.extraIds.length > 0 || item.selection.removedIds.length > 0) && (
-                            <p className="mt-1 font-body text-xs text-ink/50">
-                              {item.selection.extraIds
-                                .map((id) => product.extras?.find((e) => e.id === id)?.label)
-                                .filter(Boolean)
-                                .join(' · ')}
-                              {item.selection.extraIds.length > 0 && item.selection.removedIds.length > 0 ? ' · ' : ''}
-                              {item.selection.removedIds
-                                .map((id) => product.removables?.find((r) => r.id === id)?.label)
+                          {(item.selection.extraIds.length > 0 ||
+                            item.selection.cheese === 'mucarela' ||
+                            item.selection.vegetarian) && (
+                            <p className="mt-1 font-body text-xs text-muted">
+                              {[
+                                ...item.selection.extraIds
+                                  .map((id) => product.extras?.find((e) => e.id === id)?.label)
+                                  .filter(Boolean),
+                                item.selection.cheese === 'mucarela' ? 'Muçarela' : null,
+                                item.selection.vegetarian ? 'Vegetariano' : null,
+                              ]
                                 .filter(Boolean)
                                 .join(' · ')}
                             </p>
                           )}
+                          {item.selection.note && <p className="mt-1 font-body text-xs italic text-muted">Obs: {item.selection.note}</p>}
 
                           <div className="mt-3 flex items-center justify-between">
                             <div className="flex items-center gap-3 rounded-full border border-line px-1.5 py-1">
@@ -132,7 +127,7 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                                 type="button"
                                 onClick={() => updateQuantity(item.key, item.quantity - 1)}
                                 aria-label="Diminuir quantidade"
-                                className="flex h-6 w-6 items-center justify-center rounded-full text-ink hover:bg-graphite/5"
+                                className="flex h-6 w-6 items-center justify-center rounded-full text-ink hover:bg-ink/5"
                               >
                                 <Minus size={12} />
                               </button>
@@ -141,7 +136,7 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                                 type="button"
                                 onClick={() => updateQuantity(item.key, item.quantity + 1)}
                                 aria-label="Aumentar quantidade"
-                                className="flex h-6 w-6 items-center justify-center rounded-full text-ink hover:bg-graphite/5"
+                                className="flex h-6 w-6 items-center justify-center rounded-full text-ink hover:bg-ink/5"
                               >
                                 <Plus size={12} />
                               </button>
@@ -155,7 +150,7 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                                   onEditProduct(product)
                                 }}
                                 aria-label={`Editar ${product.name}`}
-                                className="flex items-center gap-1 font-body text-xs text-ink/50 hover:text-ink"
+                                className="flex items-center gap-1 font-body text-xs text-muted hover:text-ink"
                               >
                                 <Pencil size={12} /> editar
                               </button>
@@ -163,7 +158,7 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                                 type="button"
                                 onClick={() => removeItem(item.key)}
                                 aria-label={`Remover ${product.name}`}
-                                className="flex items-center gap-1 font-body text-xs text-ink/50 hover:text-ink"
+                                className="flex items-center gap-1 font-body text-xs text-muted hover:text-ink"
                               >
                                 <Trash2 size={12} /> remover
                               </button>
@@ -179,19 +174,15 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
 
             {items.length > 0 && (
               <div className="border-t border-line px-6 py-5">
-                <div className="flex items-center justify-between font-body text-xs text-ink/45">
+                <div className="flex items-center justify-between font-body text-xs text-muted">
                   <span>Taxa de entrega</span>
-                  <span>
-                    {SITE_CONFIG.deliveryFee > 0
-                      ? `${formatBRL(SITE_CONFIG.deliveryFee)} (entrega)`
-                      : 'A combinar'}
-                  </span>
+                  <span>{SITE_CONFIG.deliveryFee > 0 ? `${formatBRL(SITE_CONFIG.deliveryFee)} (entrega)` : 'A combinar'}</span>
                 </div>
                 <div className="mt-3 flex items-center justify-between border-t border-line pt-3">
                   <span className="font-display text-xl text-ink">
                     {SITE_CONFIG.deliveryFee > 0 ? 'Subtotal' : 'Total dos produtos'}
                   </span>
-                  <span className="font-display text-2xl text-ink">{formatBRL(subtotal)}</span>
+                  <span className="font-display text-2xl text-flame">{formatBRL(subtotal)}</span>
                 </div>
 
                 <Button variant="solid" className="mt-5 w-full" onClick={onCheckout}>

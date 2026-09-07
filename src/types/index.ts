@@ -1,14 +1,9 @@
-export type Category = 'especial' | 'hamburgueres' | 'combos' | 'fritas' | 'bebidas' | 'doces'
+export type Category = 'entradas' | 'hamburgueres' | 'bebidas'
 
 export interface ProductExtra {
   id: string
   label: string
   price: number
-}
-
-export interface ProductRemovable {
-  id: string
-  label: string
 }
 
 export interface Product {
@@ -21,14 +16,15 @@ export interface Product {
   imagePlaceholder?: boolean
   badge?: string
   extras?: ProductExtra[]
-  removables?: ProductRemovable[]
-  featured?: boolean
+  cheeseOption?: boolean
+  vegetarianOption?: boolean
 }
 
 export interface CartItemSelection {
   extraIds: string[]
-  removedIds: string[]
   note: string
+  cheese?: 'cheddar' | 'mucarela'
+  vegetarian?: boolean
 }
 
 export interface CartItem {
@@ -41,6 +37,7 @@ export interface CartItem {
 
 export type DeliveryMethod = 'retirada' | 'entrega'
 export type PaymentMethod = 'pix' | 'dinheiro' | 'debito' | 'credito'
+export type UnitId = '306' | '602'
 
 export interface CheckoutData {
   name: string
@@ -55,4 +52,5 @@ export interface CheckoutData {
   }
   payment: PaymentMethod
   changeFor: string
+  unitId: UnitId
 }

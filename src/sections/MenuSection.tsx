@@ -9,7 +9,6 @@ interface MenuSectionProps {
   onSelectProduct: (product: Product) => void
 }
 
-/** Case- and accent-insensitive so "acai"/"jalapeno" match the accented names. */
 function normalize(text: string): string {
   return text
     .toLowerCase()
@@ -18,30 +17,31 @@ function normalize(text: string): string {
 }
 
 export function MenuSection({ onSelectProduct }: MenuSectionProps) {
-  const [active, setActive] = useState<Category>('hamburgueres')
+  const [active, setActive] = useState<Category | 'todos'>('todos')
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query)
 
   const searching = deferredQuery.trim().length > 0
 
   const categoryLabelMap = useMemo(() => {
-    const map = new Map<Category, string>()
+    const map = new Map<string, string>()
     for (const c of CATEGORIES) map.set(c.id, c.label)
     return map
   }, [])
 
   const filtered = useMemo(() => {
     const term = normalize(deferredQuery.trim())
-    // A search looks across the whole menu; categories only filter when idle.
-    const base = term ? PRODUCTS : PRODUCTS.filter((p) => p.category === active)
-    if (!term) return base
-    return base.filter(
-      (p) =>
-        normalize(p.name).includes(term) ||
-        normalize(p.description).includes(term) ||
-        normalize(p.category).includes(term) ||
-        normalize(categoryLabelMap.get(p.category) ?? '').includes(term),
-    )
+    if (term) {
+      return PRODUCTS.filter(
+        (p) =>
+          normalize(p.name).includes(term) ||
+          normalize(p.description).includes(term) ||
+          normalize(p.category).includes(term) ||
+          normalize(categoryLabelMap.get(p.category) ?? '').includes(term),
+      )
+    }
+    if (active === 'todos') return PRODUCTS
+    return PRODUCTS.filter((p) => p.category === active)
   }, [active, deferredQuery, categoryLabelMap])
 
   return (
@@ -50,17 +50,15 @@ export function MenuSection({ onSelectProduct }: MenuSectionProps) {
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-body text-[11px] font-bold uppercase tracking-widest2 text-flame">O que tem hoje</p>
-            <h2 className="mt-2 font-display text-5xl leading-none tracking-wide text-ink sm:text-6xl">
-              CARDÁPIO
-            </h2>
+            <h2 className="mt-2 font-display text-5xl leading-none tracking-wide text-ink sm:text-6xl">CARDÁPIO</h2>
+            <p className="mt-2 font-body text-xs text-muted sm:text-sm">
+              Imagens ilustrativas. Consulte os ingredientes de cada produto.
+            </p>
           </div>
 
           <label className="relative w-full md:w-72">
             <span className="sr-only">Buscar no cardápio</span>
-            <Search
-              size={16}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/35"
-            />
+            <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/35" />
             <input
               type="search"
               value={query}
@@ -82,7 +80,7 @@ export function MenuSection({ onSelectProduct }: MenuSectionProps) {
         </div>
 
         <div
-          className={`mt-5 flex flex-wrap gap-1.5 transition-opacity sm:gap-2 ${searching ? 'opacity-40' : ''}`}
+          className={`mt-5 flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin sm:gap-2 ${searching ? 'opacity-40' : ''}`}
           role="tablist"
           aria-label="Categorias do cardápio"
         >
@@ -94,12 +92,12 @@ export function MenuSection({ onSelectProduct }: MenuSectionProps) {
               aria-selected={!searching && active === category.id}
               onClick={() => {
                 setQuery('')
-                setActive(category.id)
+                setActive(category.id as Category | 'todos')
               }}
-              className={`rounded-full border px-3 py-1.5 font-body text-[12px] font-bold transition-colors sm:px-3.5 sm:py-2 sm:text-[12px] ${
+              className={`shrink-0 rounded-full border px-3.5 py-2 font-body text-[12px] font-bold transition-colors ${
                 !searching && active === category.id
-                  ? 'border-ink bg-ink text-paper'
-                  : 'border-line text-ink/60 hover:border-ink/40 hover:text-ink'
+                  ? 'border-ink bg-ink text-white'
+                  : 'border-line bg-surface text-ink/60 hover:border-ink/40 hover:text-ink'
               }`}
             >
               {category.label}
@@ -108,7 +106,7 @@ export function MenuSection({ onSelectProduct }: MenuSectionProps) {
         </div>
 
         {searching && (
-          <p className="mt-5 font-body text-sm text-ink/55">
+          <p className="mt-3 font-body text-sm text-muted">
             {filtered.length === 0
               ? `Nada encontrado para “${deferredQuery.trim()}”.`
               : `${filtered.length} ${filtered.length === 1 ? 'item' : 'itens'} para “${deferredQuery.trim()}”.`}
@@ -122,7 +120,7 @@ export function MenuSection({ onSelectProduct }: MenuSectionProps) {
         </div>
 
         {filtered.length === 0 && !searching && (
-          <p className="mt-8 font-body text-sm text-ink/50">Nenhum item nesta categoria.</p>
+          <p className="mt-8 font-body text-sm text-muted">Nenhum item nesta categoria.</p>
         )}
       </div>
     </section>
