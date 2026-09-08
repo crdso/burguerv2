@@ -227,7 +227,7 @@ export function BurgerScrub() {
             ))}
           </div>
 
-          <p className="scrub-support">Hambúrguer artesanal em Palmas. Vem ser cliente/amigo.</p>
+          <p className="scrub-support">Escolha sua unidade e faça seu pedido pelo WhatsApp.</p>
 
           <div className="scrub-actions">
             <a
