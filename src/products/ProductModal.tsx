@@ -85,9 +85,13 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
           >
             <div className="flex items-start gap-3 border-b border-line p-4">
               <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-sage">
-                <span className="flex h-full w-full items-center justify-center bg-sage">
-                  <Flame size={20} strokeWidth={1.2} className="text-ink/15" />
-                </span>
+                {product.image ? (
+                  <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+                ) : (
+                  <span className="flex h-full w-full items-center justify-center bg-sage">
+                    <Flame size={20} strokeWidth={1.2} className="text-ink/15" />
+                  </span>
+                )}
               </div>
 
               <div className="min-w-0 flex-1">

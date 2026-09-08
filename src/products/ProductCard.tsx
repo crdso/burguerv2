@@ -8,7 +8,7 @@ interface ProductCardProps {
   priority?: boolean
 }
 
-export function ProductCard({ product, onSelect }: ProductCardProps) {
+export function ProductCard({ product, onSelect, priority = false }: ProductCardProps) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-xl border border-line bg-surface transition-colors duration-200 hover:border-ink/20 hover:shadow-sm">
       <button
@@ -17,9 +17,19 @@ export function ProductCard({ product, onSelect }: ProductCardProps) {
         aria-label={`Ver ${product.name}`}
         className="relative block aspect-[4/3] w-full overflow-hidden bg-sage"
       >
-        <span className="flex h-full w-full items-center justify-center bg-sage">
-          <Flame size={22} strokeWidth={1.2} className="text-ink/15" />
-        </span>
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            loading={priority ? 'eager' : 'lazy'}
+            decoding="async"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <span className="flex h-full w-full items-center justify-center bg-sage">
+            <Flame size={22} strokeWidth={1.2} className="text-ink/15" />
+          </span>
+        )}
       </button>
 
       <div className="flex flex-1 flex-col gap-0.5 p-2 sm:p-2.5">

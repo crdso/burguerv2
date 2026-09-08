@@ -93,9 +93,13 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                     return (
                       <li key={item.key} className="flex gap-4 py-5">
                         <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-sage">
-                          <div className="flex h-full w-full items-center justify-center bg-sage">
-                            <Flame size={22} strokeWidth={1} className="text-ink/15" />
-                          </div>
+                          {product.image ? (
+                            <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-sage">
+                              <Flame size={22} strokeWidth={1} className="text-ink/15" />
+                            </div>
+                          )}
                         </div>
 
                         <div className="flex flex-1 flex-col">

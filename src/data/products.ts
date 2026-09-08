@@ -1,5 +1,19 @@
 import type { Category, Product, ProductExtra } from '../types'
 
+import imgMeiaBatata from '../products/meiabatata.jpg'
+import imgBatataFrita from '../products/batatafrita.jpeg'
+import imgBatataCheddar from '../products/batatafrita-cheddar.jfif'
+import imgOnionRings from '../products/onionrings.jpg'
+import imgBolinhaQueijo from '../products/bolinhadequeijo.jfif'
+import imgRefriLata from '../products/refrigerantelata.jpg'
+import imgRefri600 from '../products/refrigerante500ml.jpg'
+import imgRefri1l from '../products/refrigerante1l.jfif'
+import imgSucoLaranja from '../products/sucodelaranja.jfif'
+import imgH2o from '../products/h2o.png'
+import imgAguaGas from '../products/aguacomgas.png'
+import imgAguaSemGas from '../products/aguasemgas.png'
+import imgSodaItaliana from '../products/sodaitaliana.jpg'
+
 export const CATEGORIES: { id: Category | 'todos'; label: string }[] = [
   { id: 'todos', label: 'Todos' },
   { id: 'entradas', label: 'Entradas' },
@@ -25,7 +39,8 @@ const ADD_ONS: ProductExtra[] = [
 
 /**
  * Cardápio real Cajuí — não inventar produtos, preços ou adicionais.
- * Imagens são ilustrativas; nenhum produto tem foto real vinculada aqui.
+ * Imagens vinculadas somente quando há correspondência inequívoca por nome de arquivo.
+ * “Imagens ilustrativas.” permanece visível no cardápio.
  */
 export const PRODUCTS: Product[] = [
   // Entradas
@@ -35,7 +50,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 15,
     category: 'entradas',
-    imagePlaceholder: true,
+    image: imgMeiaBatata,
   },
   {
     id: 'batatas-fritas',
@@ -43,7 +58,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 25,
     category: 'entradas',
-    imagePlaceholder: true,
+    image: imgBatataFrita,
   },
   {
     id: 'batatas-fritas-especial',
@@ -51,7 +66,7 @@ export const PRODUCTS: Product[] = [
     description: 'Com creme de cheddar e bacon em tiras.',
     price: 30,
     category: 'entradas',
-    imagePlaceholder: true,
+    image: imgBatataCheddar,
   },
   {
     id: 'onion-rings',
@@ -59,7 +74,7 @@ export const PRODUCTS: Product[] = [
     description: 'Anéis de cebola empanados.',
     price: 25,
     category: 'entradas',
-    imagePlaceholder: true,
+    image: imgOnionRings,
   },
   {
     id: 'bolinhas-queijo',
@@ -67,10 +82,10 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 27,
     category: 'entradas',
-    imagePlaceholder: true,
+    image: imgBolinhaQueijo,
   },
 
-  // Hambúrgueres — todos com opção vegetariana e troca de queijo onde fizer sentido
+  // Hambúrgueres — permanecem com placeholder (sem foto inequívoca fornecida)
   {
     id: 'cheese-burguer',
     name: 'Cheese Burguer',
@@ -162,7 +177,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 7,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgRefriLata,
   },
   {
     id: 'refri-600',
@@ -170,7 +185,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 9,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgRefri600,
   },
   {
     id: 'refri-1l',
@@ -178,7 +193,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 11,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgRefri1l,
   },
   {
     id: 'suco-laranja-300',
@@ -186,7 +201,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 8,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgSucoLaranja,
   },
   {
     id: 'h2o',
@@ -194,7 +209,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 8,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgH2o,
   },
   {
     id: 'agua-gas',
@@ -202,7 +217,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 5,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgAguaGas,
   },
   {
     id: 'agua-mineral',
@@ -210,7 +225,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 4,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgAguaSemGas,
   },
   {
     id: 'soda-italiana-500',
@@ -218,7 +233,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 16,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: imgSodaItaliana,
   },
 ]
 
