@@ -104,7 +104,6 @@ export function Footer() {
           <p className="font-body text-xs text-white/55">
             © {year} {SITE_CONFIG.brand}. Todos os direitos reservados.
           </p>
-          <p className="font-body text-xs text-white/40">Cardápio oficial BeeFood · Fotos reais onde disponível.</p>
         </div>
       </div>
     </footer>
