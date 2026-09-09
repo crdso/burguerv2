@@ -10,9 +10,9 @@ export const CATEGORIES: { id: Category | 'todos'; label: string }[] = [
 
 /**
  * Cardápio sincronizado com BeeFood (https://menu.beefood.com.br/cajui263?a=3929) em 2026-09-08.
- * Fonte principal: cajui-beefood-visible-text.txt + HTML + image-urls.
+ * Fonte principal: cajui-beefood-visible-text.txt + HTML + cajui-beefood-DEEP-images.json.
  * Preços, nomes e descrições copiados literalmente, sem invenção.
- * Imagens: 9 fotos reais baixadas para public/products/cajui/ ; demais produtos sem foto usam placeholder.
+ * Imagens: 24 fotos reais baixadas para public/products/cajui/ (9 iniciais + 15 do DEEP); 3 produtos sem foto mantêm placeholder.
  */
 export const PRODUCTS: Product[] = [
   // Entradas (7)
@@ -22,7 +22,7 @@ export const PRODUCTS: Product[] = [
     description: 'Anéis de cebola empanados.',
     price: 25,
     category: 'entradas',
-    image: '/products/cajui/onion-rings.jpg',
+    image: '/products/cajui/onion-rings.webp',
   },
   {
     id: 'batatas-fritas',
@@ -30,7 +30,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 25,
     category: 'entradas',
-    image: '/products/cajui/batatas-fritas.jpg',
+    image: '/products/cajui/batatas-fritas.webp',
   },
   {
     id: 'meia-batata',
@@ -46,7 +46,7 @@ export const PRODUCTS: Product[] = [
     description: 'Com creme de cheddar e bacon em tiras.',
     price: 30,
     category: 'entradas',
-    image: '/products/cajui/batatas-fritas-especial.jpg',
+    image: '/products/cajui/batatas-fritas-especial.webp',
   },
   {
     id: 'bolinhas-queijo',
@@ -101,7 +101,7 @@ export const PRODUCTS: Product[] = [
       'Pão selado na chapa, hambúrguer artesanal 140 gramas, queijo cheddar, bacon, barbecue, cebola roxa, tomate, alface e molho especial da casa.',
     price: 31,
     category: 'hamburgueres',
-    image: '/products/cajui/burguer.jpg',
+    image: '/products/cajui/burguer.webp',
   },
   {
     id: 'burguer-chicken',
@@ -109,7 +109,7 @@ export const PRODUCTS: Product[] = [
     description: 'Pão selado na chapa, cream cheese, frango empanado, cebola e alface.',
     price: 34,
     category: 'hamburgueres',
-    imagePlaceholder: true,
+    image: '/products/cajui/burguer-chicken.webp',
   },
   {
     id: 'burguer-onion',
@@ -118,7 +118,7 @@ export const PRODUCTS: Product[] = [
       'Pão selado na chapa, hambúrguer artesanal 140 gramas, queijo cheddar, bacon, onion rings, barbecue e molho especial da casa.',
     price: 35,
     category: 'hamburgueres',
-    imagePlaceholder: true,
+    image: '/products/cajui/burguer-onion.webp',
   },
   {
     id: 'cebola-caramelizada',
@@ -127,7 +127,7 @@ export const PRODUCTS: Product[] = [
       'Pão selado na chapa, hambúrguer artesanal 140 gramas, queijo cheddar, bacon, cebola caramelizada e molho especial da casa.',
     price: 36,
     category: 'hamburgueres',
-    imagePlaceholder: true,
+    image: '/products/cajui/cebola-caramelizada.webp',
   },
   {
     id: 'cheese-burguer',
@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
       'Pão selado na chapa, hambúrguer artesanal 140gramas, queijo cheddar e molho especial da casa.',
     price: 25,
     category: 'hamburgueres',
-    imagePlaceholder: true,
+    image: '/products/cajui/cheese-burguer.webp',
   },
   {
     id: 'combo-casal',
@@ -144,7 +144,7 @@ export const PRODUCTS: Product[] = [
     description: '1 Chesse burguer, 1 abacashow, anéis de cebola, nuggets, batata frita especial e molhos.',
     price: 99.9,
     category: 'hamburgueres',
-    imagePlaceholder: true,
+    image: '/products/cajui/combo-casal.webp',
   },
   {
     id: 'insano',
@@ -153,7 +153,7 @@ export const PRODUCTS: Product[] = [
       'Pão selado na chapa, duplo hambúrguer artesanal 140gramas, duplo cheddar, duplo bacon, barbecue e molho especial da casa.',
     price: 42,
     category: 'hamburgueres',
-    imagePlaceholder: true,
+    image: '/products/cajui/insano.webp',
   },
 
   // Bebidas (11)
@@ -163,7 +163,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 7,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/guarana-350.webp',
   },
   {
     id: 'agua-sem-gas',
@@ -171,7 +171,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 4,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/agua-sem-gas.webp',
   },
   {
     id: 'cajuina-500',
@@ -179,7 +179,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 17.9,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/cajuina-500.webp',
   },
   {
     id: 'coca-zero-350',
@@ -187,7 +187,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 7,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/coca-zero-350.webp',
   },
   {
     id: 'coca-1l-zero',
@@ -195,7 +195,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 11,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/coca-1l-zero.webp',
   },
   {
     id: 'cajuina-330',
@@ -203,7 +203,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 13.9,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/cajuina-330.webp',
   },
   {
     id: 'coca-zero-600',
@@ -211,7 +211,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 9,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/coca-zero-600.webp',
   },
   {
     id: 'guarana-600',
@@ -219,7 +219,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 9,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/guarana-600.webp',
   },
   {
     id: 'soda-morango',
@@ -243,7 +243,7 @@ export const PRODUCTS: Product[] = [
     description: '',
     price: 16,
     category: 'bebidas',
-    imagePlaceholder: true,
+    image: '/products/cajui/soda-maca-verde.webp',
   },
 ]
 
