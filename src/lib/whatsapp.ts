@@ -82,15 +82,6 @@ export function buildWhatsappMessage(items: CartItem[], checkout: CheckoutData, 
       lines.push(`   + ${label} — ${formatBRL(extra.price * item.quantity)}`)
     }
 
-    if (item.selection.cheese && product.cheeseOption) {
-      const cheeseLabel = item.selection.cheese === 'mucarela' ? 'Muçarela' : 'Cheddar'
-      lines.push(`   Queijo: ${cheeseLabel}`)
-    }
-
-    if (item.selection.vegetarian) {
-      lines.push(`   Substituir proteína por hambúrguer vegetal`)
-    }
-
     if (item.selection.note.trim()) {
       lines.push(`   Obs: ${item.selection.note.trim()}`)
     }

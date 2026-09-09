@@ -1,4 +1,4 @@
-export type Category = 'entradas' | 'hamburgueres' | 'bebidas'
+export type Category = 'entradas' | 'hamburguer-do-mes' | 'hamburgueres' | 'bebidas'
 
 export interface ProductExtra {
   id: string
@@ -16,15 +16,11 @@ export interface Product {
   imagePlaceholder?: boolean
   badge?: string
   extras?: ProductExtra[]
-  cheeseOption?: boolean
-  vegetarianOption?: boolean
 }
 
 export interface CartItemSelection {
   extraIds: string[]
   note: string
-  cheese?: 'cheddar' | 'mucarela'
-  vegetarian?: boolean
 }
 
 export interface CartItem {

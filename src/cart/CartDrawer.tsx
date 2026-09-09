@@ -108,17 +108,10 @@ export function CartDrawer({ onCheckout, onEditProduct }: CartDrawerProps) {
                             <p className="font-body text-sm font-bold text-flame">{formatBRL(item.unitPrice * item.quantity)}</p>
                           </div>
 
-                          {(item.selection.extraIds.length > 0 ||
-                            item.selection.cheese === 'mucarela' ||
-                            item.selection.vegetarian) && (
+                          {item.selection.extraIds.length > 0 && (
                             <p className="mt-1 font-body text-xs text-muted">
-                              {[
-                                ...item.selection.extraIds
-                                  .map((id) => product.extras?.find((e) => e.id === id)?.label)
-                                  .filter(Boolean),
-                                item.selection.cheese === 'mucarela' ? 'Muçarela' : null,
-                                item.selection.vegetarian ? 'Vegetariano' : null,
-                              ]
+                              {item.selection.extraIds
+                                .map((id) => product.extras?.find((e) => e.id === id)?.label)
                                 .filter(Boolean)
                                 .join(' · ')}
                             </p>

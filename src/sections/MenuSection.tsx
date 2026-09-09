@@ -52,7 +52,7 @@ export function MenuSection({ onSelectProduct }: MenuSectionProps) {
             <p className="font-body text-[11px] font-bold uppercase tracking-widest2 text-flame">O que tem hoje</p>
             <h2 className="mt-2 font-display text-5xl leading-none tracking-wide text-ink sm:text-6xl">CARDÁPIO</h2>
             <p className="mt-2 font-body text-xs text-muted sm:text-sm">
-              Imagens ilustrativas. Consulte os ingredientes de cada produto.
+              Fotos oficiais do cardápio BeeFood. Consulte os ingredientes de cada produto.
             </p>
           </div>
 

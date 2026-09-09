@@ -5,7 +5,7 @@ import { getProductById } from '../data/products'
 
 function selectionKey(productId: string, selection: CartItemSelection): string {
   const extras = [...selection.extraIds].sort().join(',')
-  return `${productId}|${extras}|${selection.cheese ?? 'cheddar'}|${selection.vegetarian ? 'veg' : 'carne'}|${selection.note.trim()}`
+  return `${productId}|${extras}|${selection.note.trim()}`
 }
 
 export function computeUnitPrice(product: Product, selection: CartItemSelection): number {
@@ -69,7 +69,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'cajui-cart',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ items: state.items }),
     },

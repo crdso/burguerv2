@@ -15,8 +15,6 @@ interface ProductModalProps {
 export function ProductModal({ product, onClose }: ProductModalProps) {
   const [quantity, setQuantity] = useState(1)
   const [extraIds, setExtraIds] = useState<string[]>([])
-  const [cheese, setCheese] = useState<'cheddar' | 'mucarela'>('cheddar')
-  const [vegetarian, setVegetarian] = useState(false)
   const [note, setNote] = useState('')
   const addItem = useCartStore((s) => s.addItem)
   const openCart = useCartStore((s) => s.openCart)
@@ -27,20 +25,10 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
   useEffect(() => {
     setQuantity(1)
     setExtraIds([])
-    setCheese('cheddar')
-    setVegetarian(false)
     setNote('')
   }, [product?.id])
 
-  const selection: CartItemSelection = useMemo(
-    () => ({
-      extraIds,
-      note,
-      cheese: product?.cheeseOption ? cheese : undefined,
-      vegetarian: product?.vegetarianOption ? vegetarian : undefined,
-    }),
-    [extraIds, note, cheese, vegetarian, product],
-  )
+  const selection: CartItemSelection = useMemo(() => ({ extraIds, note }), [extraIds, note])
 
   const unitPrice = product ? computeUnitPrice(product, selection) : 0
   const total = unitPrice * quantity
@@ -100,7 +88,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
                 </h2>
                 <p className="mt-1.5 font-body text-xs leading-relaxed text-muted">{product.description || ' '}</p>
                 <p className="mt-2 font-body text-sm font-bold text-flame">{formatBRL(product.price)}</p>
-                <p className="mt-1 font-body text-[10px] text-ink/40">Imagem ilustrativa.</p>
+                {!product.image && <p className="mt-1 font-body text-[10px] text-ink/40">Imagem ilustrativa / foto não disponível.</p>}
               </div>
 
               <button
@@ -114,51 +102,6 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 py-4">
-              {product.cheeseOption && (
-                <fieldset className="mb-4">
-                  <legend className="font-body text-[11px] font-bold uppercase tracking-widest2 text-ink/45">Queijo</legend>
-                  <p className="mt-1 font-body text-[11px] text-muted">Troca sem custo adicional.</p>
-                  <div className="mt-2 grid grid-cols-2 gap-2">
-                    {[
-                      { id: 'cheddar', label: 'Cheddar' },
-                      { id: 'mucarela', label: 'Muçarela' },
-                    ].map((opt) => (
-                      <label
-                        key={opt.id}
-                        className={`flex cursor-pointer items-center justify-center rounded-lg border px-3 py-2.5 font-body text-sm transition-colors ${
-                          cheese === opt.id ? 'border-ink bg-ink/5 text-ink' : 'border-line text-ink/70 hover:border-ink/40'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="cheese"
-                          value={opt.id}
-                          checked={cheese === opt.id}
-                          onChange={() => setCheese(opt.id as 'cheddar' | 'mucarela')}
-                          className="sr-only"
-                        />
-                        {opt.label}
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
-              )}
-
-              {product.vegetarianOption && (
-                <label className="mb-4 flex cursor-pointer items-center gap-3 rounded-lg border border-line bg-sage/50 px-3 py-3">
-                  <input
-                    type="checkbox"
-                    checked={vegetarian}
-                    onChange={(e) => setVegetarian(e.target.checked)}
-                    className="h-4 w-4 accent-ink"
-                  />
-                  <span className="flex flex-col">
-                    <span className="font-body text-sm font-semibold text-ink">Substituir proteína por hambúrguer vegetal</span>
-                    <span className="font-body text-xs text-muted">Sem custo adicional · R$ 0,00</span>
-                  </span>
-                </label>
-              )}
-
               {product.extras && product.extras.length > 0 && (
                 <fieldset>
                   <legend className="font-body text-[11px] font-bold uppercase tracking-widest2 text-ink/45">Adicionais</legend>
